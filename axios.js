@@ -22,7 +22,7 @@ async function Axios(options, callback) {
                 const res = await requestMethod(`${host}/${requestRoute}${requestParams || ''}`, payload, { headers } || {})
                 if (res) {
                     if (res.data.body && crypto) {
-                        const decrypted = cryptojs.AES.decrypt(res.data.body, 'syncupservercryptokey').toString(cryptojs.enc.Utf8);
+                        const decrypted = cryptojs.AES.decrypt(res.data.body, CRYPTO_SECRET_KEY).toString(cryptojs.enc.Utf8);
                         return await callback(JSON.parse(decrypted), res, null)
                     }
                     else {
@@ -33,7 +33,7 @@ async function Axios(options, callback) {
                 const res = await requestMethod(`${host}/${requestRoute}${requestParams || ''}`, { headers } || {})
                 if (res) {
                     if (res.data.body && crypto) {
-                        const decrypted = cryptojs.AES.decrypt(res.data.body, 'syncupservercryptokey').toString(cryptojs.enc.Utf8);
+                        const decrypted = cryptojs.AES.decrypt(res.data.body, CRYPTO_SECRET_KEY).toString(cryptojs.enc.Utf8);
                         return await callback(JSON.parse(decrypted), res, null)
                     }
                     else{
@@ -72,12 +72,5 @@ function getParams(params) {
         }
     }).toString().replace(/,/g, '')
     return entries
-}
-const opt = {
-    route: 'isAlive',
-    headers: { Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNpcmFqanUiLCJlbWFpbCI6Im11bm5hczJhYUBnbWFpbC5jb20iLCJpYXQiOjE3MDUxMzYxMjZ9.ObWWHIHfs1tNZDdLU9O9kia5ZrmOfu5_D2ARZVmfJFY` },
-    params: { getData: true },
-    crypto: true,
-    failUrl: '/login'
 }
 export default Axios
